@@ -11,6 +11,8 @@ import { Button } from "@/components/ui/button";
 
 const _meses = range(1, 13).map(m => m)
 
+export const instant = false
+
 export default async function Home(props: PageProps<"/">) {
 
   await props.searchParams
@@ -66,7 +68,7 @@ export default async function Home(props: PageProps<"/">) {
           <CardDescription>Detalha a Arrecadação durante os 12 meses do ano</CardDescription>
           <CardAction>
             <ButtonGroup>
-              <Button variant={'outline'}>TOTAL</Button>
+              <Button variant={'outline'} >TOTAL</Button>
               <Button variant={'outline'}>ISS</Button>
               <Button variant={'outline'}>IPTU</Button>
               <Button variant={'outline'}>ITBI</Button>
