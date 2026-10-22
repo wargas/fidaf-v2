@@ -24,7 +24,6 @@ export default async function IpcaPage({ searchParams }: PageProps<"/receitas">)
     const data = await db
         .select()
         .from(recolhimentoDiario)
-    // .where(between(recolhimentoDiario.data, inicio, fim))
 
     const lista = data.map(r => ({
         ...r,
@@ -64,51 +63,6 @@ export default async function IpcaPage({ searchParams }: PageProps<"/receitas">)
         })
         .map(r => ({ ...r, diferenca: r.total.corrente - r.total.anterior }))
         .filter(m => m.total.anterior > 0 || m.total.corrente > 0)
-
-    const dias = Object.keys(_.groupBy(data, "data")).map(dia => {
-
-        const receitas = _.filter(data, { data: dia }).map(i => ({
-            ...i,
-            nominal: parseFloat(String(i.nominal)),
-            corrigido: parseFloat(String(i.corrigido)),
-        }))
-
-        const total = {
-            corrigido: sumBy(receitas, "corrigido"),
-            nominal: sumBy(receitas, "nominal"),
-        }
-
-        const iss = {
-            corrigido: sumBy(_.filter(receitas, { imposto: "ISS" }), "corrigido",),
-            nominal: sumBy(_.filter(receitas, { imposto: "ISS" }), "nominal"),
-        }
-
-        const iptu = {
-            corrigido: sumBy(_.filter(receitas, { imposto: "IPTU" }), "corrigido",),
-            nominal: sumBy(_.filter(receitas, { imposto: "IPTU" }), "nominal"),
-        }
-
-        const itbi = {
-            corrigido: sumBy(_.filter(receitas, { imposto: "ITBI" }), "corrigido",),
-            nominal: sumBy(_.filter(receitas, { imposto: "ITBI" }), "nominal"),
-        }
-
-        const adicional = {
-            corrigido: sumBy(_.filter(receitas, { imposto: "JUROS MULTAS" }), "corrigido",),
-            nominal: sumBy(_.filter(receitas, { imposto: "JUROS MULTAS" }), "nominal"),
-        }
-
-        return {
-            dia,
-            total,
-            iss,
-            iptu,
-            itbi,
-            adicional
-            // receitas
-        }
-    }).filter(d => d.total.nominal > 0)
-
 
     return <div className="flex flex-col">
         <Form action={``} className="p-4 border-b flex gap-2">

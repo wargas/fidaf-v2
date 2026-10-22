@@ -100,6 +100,7 @@ export function DataGridMensal({ data }: { data: Row[] }) {
                     const total = sumBy(data, `diferenca`)
                     return <div className={cn("text-right font-bold", {'text-red-600': total < 0})}>{total.toLocaleString()}</div>
                 },
+                frozen: "end"
             }
 
         ]} rows={data} />

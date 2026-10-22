@@ -1,9 +1,83 @@
-import Image from "next/image";
+import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { ChartContainer } from "@/components/ui/chart";
+import { recolhimentoDiario } from "@/drizzle/schema";
+import { ano_atual } from "@/lib/constants";
+import { db } from "@/lib/db";
+import { range, sumBy, filter } from "lodash";
+import { BarChart } from "recharts";
+import { MainChart } from "./_components";
+import { ButtonGroup } from "@/components/ui/button-group";
+import { Button } from "@/components/ui/button";
 
-export default function Home() {
+const _meses = range(1, 13).map(m => m)
+
+export default async function Home(props: PageProps<"/">) {
+
+  await props.searchParams
+
+  const data = await db
+    .select()
+    .from(recolhimentoDiario)
+
+  const lista = data.map(r => ({
+    ...r,
+    nominal: parseFloat(String(r.nominal)),
+    corrigido: parseFloat(String(r.corrigido)),
+    dia: parseInt(r.data!.replace(/(\d+)-(\d+)-(\d+)/, "$3")),
+    mes: parseInt(r.data!.replace(/(\d+)-(\d+)-(\d+)/, "$2")),
+    ano: parseInt(r.data!.replace(/(\d+)-(\d+)-(\d+)/, "$1")),
+    dia_ano: r.data!.replace(/(\d+)-(\d+)-(\d+)/, "$2-$3"),
+  }))
+
+  const meses = _meses
+    .map(mes => {
+      return {
+        mes: mes.toString().padStart(2, '0'),
+        iss: {
+          anterior: sumBy(filter(lista, { mes, imposto: 'ISS', ano: ano_atual - 1 }), 'corrigido'),
+          corrente: sumBy(filter(lista, { mes, imposto: 'ISS', ano: ano_atual }), 'corrigido'),
+        },
+        iptu: {
+          anterior: sumBy(filter(lista, { mes, imposto: 'IPTU', ano: ano_atual - 1 }), 'corrigido'),
+          corrente: sumBy(filter(lista, { mes, imposto: 'IPTU', ano: ano_atual }), 'corrigido'),
+        },
+        itbi: {
+          anterior: sumBy(filter(lista, { mes, imposto: 'IPTU', ano: ano_atual - 1 }), 'corrigido'),
+          corrente: sumBy(filter(lista, { mes, imposto: 'IPTU', ano: ano_atual }), 'corrigido'),
+        },
+        adicional: {
+          anterior: sumBy(filter(lista, { mes, imposto: 'JUROS MULTAS', ano: ano_atual - 1 }), 'corrigido'),
+          corrente: sumBy(filter(lista, { mes, imposto: 'JUROS MULTAS', ano: ano_atual }), 'corrigido'),
+        },
+        total: {
+          anterior: sumBy(filter(lista, { mes, ano: ano_atual - 1 }), 'corrigido'),
+          corrente: sumBy(filter(lista, { mes, ano: ano_atual }), 'corrigido'),
+        },
+      }
+    })
+    .map(r => ({ ...r, diferenca: r.total.corrente - r.total.anterior }))
+    .filter(m => m.total.anterior > 0 || m.total.corrente > 0)
+
   return (
-    <div>
-      
+    <div className="p-4">
+      <Card>
+        <CardHeader>
+          <CardTitle>Arrecadacao Mensal</CardTitle>
+          <CardDescription>Detalha a Arrecadação durante os 12 meses do ano</CardDescription>
+          <CardAction>
+            <ButtonGroup>
+              <Button variant={'outline'}>TOTAL</Button>
+              <Button variant={'outline'}>ISS</Button>
+              <Button variant={'outline'}>IPTU</Button>
+              <Button variant={'outline'}>ITBI</Button>
+              <Button variant={'outline'}>JUROS/MULTAS</Button>
+            </ButtonGroup>
+          </CardAction>
+        </CardHeader>
+        <CardContent>
+          <MainChart data={meses} />
+        </CardContent>
+      </Card>
     </div>
   );
 }
