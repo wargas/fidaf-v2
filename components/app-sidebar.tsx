@@ -3,7 +3,7 @@ import { Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGrou
 import { Calculator, Calendar1Icon, ChartLine, DollarSign, HomeIcon } from "lucide-react";
 
 export function AppSidebar() {
-    return <Sidebar>
+    return <Sidebar collapsible="icon" variant="sidebar">
         <SidebarHeader>
             <SidebarMenu>
                 <SidebarMenuItem>
