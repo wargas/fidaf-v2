@@ -8,6 +8,8 @@ import { BarChart } from "recharts";
 import { MainChart } from "./_components";
 import { ButtonGroup } from "@/components/ui/button-group";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import { cn } from "cn";
 
 const _meses = range(1, 13).map(m => m)
 
@@ -15,7 +17,7 @@ export const instant = false
 
 export default async function Home(props: PageProps<"/">) {
 
-  await props.searchParams
+  const { key = "total" } = await props.searchParams
 
   const data = await db
     .select()
@@ -44,8 +46,8 @@ export default async function Home(props: PageProps<"/">) {
           corrente: sumBy(filter(lista, { mes, imposto: 'IPTU', ano: ano_atual }), 'corrigido'),
         },
         itbi: {
-          anterior: sumBy(filter(lista, { mes, imposto: 'IPTU', ano: ano_atual - 1 }), 'corrigido'),
-          corrente: sumBy(filter(lista, { mes, imposto: 'IPTU', ano: ano_atual }), 'corrigido'),
+          anterior: sumBy(filter(lista, { mes, imposto: 'ITBI', ano: ano_atual - 1 }), 'corrigido'),
+          corrente: sumBy(filter(lista, { mes, imposto: 'ITBI', ano: ano_atual }), 'corrigido'),
         },
         adicional: {
           anterior: sumBy(filter(lista, { mes, imposto: 'JUROS MULTAS', ano: ano_atual - 1 }), 'corrigido'),
@@ -68,11 +70,11 @@ export default async function Home(props: PageProps<"/">) {
           <CardDescription>Detalha a Arrecadação durante os 12 meses do ano</CardDescription>
           <CardAction>
             <ButtonGroup>
-              <Button variant={'outline'} >TOTAL</Button>
-              <Button variant={'outline'}>ISS</Button>
-              <Button variant={'outline'}>IPTU</Button>
-              <Button variant={'outline'}>ITBI</Button>
-              <Button variant={'outline'}>JUROS/MULTAS</Button>
+              <Button size={`xs`} variant={'outline'} className={cn({'font-bold': key == `total`})} render={<Link href={`?key=total`}>TOTAL</Link>} />
+              <Button size={`xs`} variant={'outline'} className={cn({'font-bold': key == `iss`})} render={<Link href={`?key=iss`}>ISS</Link>} />
+              <Button size={`xs`} variant={'outline'} className={cn({'font-bold': key == `iptu`})} render={<Link href={`?key=iptu`}>IPTU</Link>} />
+              <Button size={`xs`} variant={'outline'} className={cn({'font-bold': key == `itbi`})} render={<Link href={`?key=itbi`}>ITBI</Link>} />
+              <Button size={`xs`} variant={'outline'} className={cn({'font-bold': key == `adicional`})} render={<Link href={`?key=adicional`}>JUROS/MULTAS</Link>} />
             </ButtonGroup>
           </CardAction>
         </CardHeader>
