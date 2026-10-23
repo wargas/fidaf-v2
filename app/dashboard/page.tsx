@@ -11,6 +11,8 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { cn } from "cn";
 import { Suspense } from "react";
+import { Skeleton } from "@/components/ui/skeleton";
+import { SkeletonChart } from "./_components";
 
 const _meses = range(1, 13).map(m => m)
 
@@ -18,8 +20,6 @@ const _meses = range(1, 13).map(m => m)
 export default async function Home(props: PageProps<"/">) {
 
   const { key = "total" } = await props.searchParams
-
-
 
   return (
     <div className="p-4">
@@ -38,7 +38,8 @@ export default async function Home(props: PageProps<"/">) {
           </CardAction>
         </CardHeader>
         <CardContent>
-          <Suspense fallback={<span>carregando...</span>}>
+          {/* <SkeletonChart /> */}
+          <Suspense fallback={<SkeletonChart />}>
             <DashboardData key={key.toString()} />
           </Suspense>
         </CardContent>

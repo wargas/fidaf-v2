@@ -10,6 +10,7 @@ import { formatDate, startOfMonth, subDays, eachMonthOfInterval, startOfYear } f
 import { between, or, sql, } from "drizzle-orm"
 import { InputDate } from "@/components/input-date"
 import { Suspense } from "react"
+import { SkeletonTable } from "@/components/skeleton-table"
 
 const startMonth = formatDate(startOfYear(new Date()), "yyyy-MM-dd")
 const endMonth = formatDate(subDays(new Date(), 1), "yyyy-MM-dd")
@@ -35,7 +36,7 @@ export default async function IpcaPage({ searchParams }: PageProps<"/receitas">)
                 Filtrar</Button>
         </Form>
         
-        <Suspense fallback={<span>carregando...</span>}>
+        <Suspense fallback={<SkeletonTable />}>
             <CalculoData inicio={inicio} fim={fim} />
         </Suspense>
 

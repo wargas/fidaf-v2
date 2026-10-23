@@ -12,6 +12,7 @@ import qs from 'querystring'
 import { InputDate } from "@/components/input-date"
 import { ButtonGroup } from "@/components/ui/button-group"
 import { Suspense } from "react"
+import { SkeletonTable } from "@/components/skeleton-table"
 
 const endMonth = formatDate(subDays(new Date(), 1), "yyyy-MM-dd")
 
@@ -33,7 +34,7 @@ export default async function MensalPage({ searchParams }: PageProps<"/receitas"
                 Filtrar</Button>
         </Form>
 
-        <Suspense fallback={<span>carregando...</span>}>
+        <Suspense fallback={<SkeletonTable />}>
             <MensalData limit={limit} />
         </Suspense>
 

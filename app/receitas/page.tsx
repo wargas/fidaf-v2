@@ -9,6 +9,7 @@ import { formatDate, startOfMonth, subDays } from "date-fns"
 import { between, } from "drizzle-orm"
 import { InputDate } from "@/components/input-date"
 import { Suspense } from "react"
+import { SkeletonTable } from "@/components/skeleton-table"
 
 const startMonth = formatDate(startOfMonth(new Date()), "yyyy-MM-dd")
 const endMonth = formatDate(subDays(new Date(), 1), "yyyy-MM-dd")
@@ -30,7 +31,7 @@ export default async function ReceitasPage({ searchParams }: PageProps<"/receita
                 Filtrar</Button>
         </Form>
 
-        <Suspense fallback={<span>carregando...</span>}>
+        <Suspense fallback={<SkeletonTable />}>
             <ReceitasData inicio={inicio} fim={fim} />
         </Suspense>
 

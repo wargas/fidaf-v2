@@ -5,6 +5,7 @@ import { db } from "@/lib/db"
 import _ from "lodash"
 import { DataGridIPCA } from "./_components"
 import { Suspense } from "react"
+import { SkeletonTable } from "@/components/skeleton-table"
 
 const _meses = _.range(1, 13).map(a => a.toString().padStart(2, "0"))
 export default async function IpcaPage({ searchParams }: PageProps<"/ipca">) {
@@ -14,7 +15,7 @@ export default async function IpcaPage({ searchParams }: PageProps<"/ipca">) {
 
 
     return <div>
-        <Suspense fallback={<span>carregando...</span>}>
+        <Suspense fallback={<SkeletonTable />}>
             <IPCAData />
         </Suspense>
     </div>
