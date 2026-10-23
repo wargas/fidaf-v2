@@ -11,16 +11,36 @@ import { between, } from "drizzle-orm"
 import qs from 'querystring'
 import { InputDate } from "@/components/input-date"
 import { ButtonGroup } from "@/components/ui/button-group"
+import { Suspense } from "react"
 
-const startMonth = formatDate(startOfMonth(new Date()), "yyyy-MM-dd")
 const endMonth = formatDate(subDays(new Date(), 1), "yyyy-MM-dd")
 
-export default async function IpcaPage({ searchParams }: PageProps<"/receitas">) {
+
+export default async function MensalPage({ searchParams }: PageProps<"/receitas">) {
 
     const params = await searchParams
 
     const limit = _.has(params, "limit") ? String(params.limit) : endMonth
 
+
+    return <div className="flex flex-col">
+        <Form action={``} className="p-4 border-b flex gap-2">
+
+            <InputDate defaultValue={limit} name="limit" />
+
+            <Button type="submit">
+                <FilterIcon />
+                Filtrar</Button>
+        </Form>
+
+        <Suspense fallback={<span>carregando...</span>}>
+            <MensalData limit={limit} />
+        </Suspense>
+
+    </div>
+}
+
+async function MensalData({ limit }: { limit: string }) {
     const data = await db
         .select()
         .from(recolhimentoDiario)
@@ -62,19 +82,7 @@ export default async function IpcaPage({ searchParams }: PageProps<"/receitas">)
             }
         })
         .map(r => ({ ...r, diferenca: r.total.corrente - r.total.anterior }))
-        .filter(m => m.total.anterior > 0 || m.total.corrente > 0)
+        .filter(m => m.total.anterior > 0 || m.total.corrente > 0);
 
-    return <div className="flex flex-col">
-        <Form action={``} className="p-4 border-b flex gap-2">
-
-            <InputDate defaultValue={limit} name="limit" />
-
-            <Button type="submit">
-                <FilterIcon />
-                Filtrar</Button>
-        </Form>
-
-        <DataGridMensal data={meses as any} />
-        {/* {JSON.stringify(lista[0])} */}
-    </div>
+    return <DataGridMensal data={meses as any} />
 }

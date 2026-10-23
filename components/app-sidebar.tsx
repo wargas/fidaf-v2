@@ -19,7 +19,7 @@ export function AppSidebar() {
                 <SidebarGroupContent>
                     <SidebarMenu>
                         <SidebarMenuItem>
-                            <SidebarMenuButton render={<Link href={`/`}>
+                            <SidebarMenuButton render={<Link href={`/dashboard`}>
                                 <HomeIcon />
                                 Dashboard</Link>} />
                         </SidebarMenuItem>

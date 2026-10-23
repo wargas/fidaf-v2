@@ -9,6 +9,7 @@ import { FilterIcon } from "lucide-react"
 import { formatDate, startOfMonth, subDays, eachMonthOfInterval, startOfYear } from "date-fns"
 import { between, or, sql, } from "drizzle-orm"
 import { InputDate } from "@/components/input-date"
+import { Suspense } from "react"
 
 const startMonth = formatDate(startOfYear(new Date()), "yyyy-MM-dd")
 const endMonth = formatDate(subDays(new Date(), 1), "yyyy-MM-dd")
@@ -21,6 +22,28 @@ export default async function IpcaPage({ searchParams }: PageProps<"/receitas">)
     const fim = _.has(params, "fim") ? String(params.fim) : endMonth
 
 
+
+
+    return <div className="flex flex-col">
+        <Form action={``} className="p-4 border-b flex gap-2">
+            {/* <Input className="max-w-40" placeholder="inicio" key={`inicio-${inicio}`} defaultValue={inicio} name="inicio" /> */}
+            <InputDate defaultValue={inicio} name="inicio" />
+            <InputDate defaultValue={fim} name="fim" />
+
+            <Button type="submit">
+                <FilterIcon />
+                Filtrar</Button>
+        </Form>
+        
+        <Suspense fallback={<span>carregando...</span>}>
+            <CalculoData inicio={inicio} fim={fim} />
+        </Suspense>
+
+
+    </div>
+}
+
+async function CalculoData({ inicio, fim }: { inicio: string, fim: string }) {
     const meses = eachMonthOfInterval({ start: inicio, end: fim }).length - 1
 
     const dataCorrente = await db
@@ -108,18 +131,5 @@ export default async function IpcaPage({ searchParams }: PageProps<"/receitas">)
         label: "VALOR ANALISTA (ANUAL PROJETADO)", value: (valorPonto * 2.1 / meses * 12).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
     })
 
-    return <div className="flex flex-col">
-        <Form action={``} className="p-4 border-b flex gap-2">
-            {/* <Input className="max-w-40" placeholder="inicio" key={`inicio-${inicio}`} defaultValue={inicio} name="inicio" /> */}
-            <InputDate defaultValue={inicio} name="inicio" />
-            <InputDate defaultValue={fim} name="fim" />
-
-            <Button type="submit">
-                <FilterIcon />
-                Filtrar</Button>
-        </Form>
-        <DataGridCalculo data={data as any} />
-
-
-    </div>
+    return <DataGridCalculo data={data as any} />
 }
