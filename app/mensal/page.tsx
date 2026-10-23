@@ -69,8 +69,8 @@ async function MensalData({ limit }: { limit: string }) {
                     corrente: sumBy(filter(lista, { mes, imposto: 'IPTU', ano: ano_atual }), 'corrigido'),
                 },
                 itbi: {
-                    anterior: sumBy(filter(lista, { mes, imposto: 'IPTU', ano: ano_atual - 1 }), 'corrigido'),
-                    corrente: sumBy(filter(lista, { mes, imposto: 'IPTU', ano: ano_atual }), 'corrigido'),
+                    anterior: sumBy(filter(lista, { mes, imposto: 'ITBI', ano: ano_atual - 1 }), 'corrigido'),
+                    corrente: sumBy(filter(lista, { mes, imposto: 'ITBI', ano: ano_atual }), 'corrigido'),
                 },
                 adicional: {
                     anterior: sumBy(filter(lista, { mes, imposto: 'JUROS MULTAS', ano: ano_atual - 1 }), 'corrigido'),
