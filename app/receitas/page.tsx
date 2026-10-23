@@ -12,6 +12,7 @@ import { Suspense } from "react";
 import { SkeletonTable } from "@/components/skeleton-table";
 import Link from "next/link";
 import { ano_atual } from "@/lib/constants";
+import { FormLoading } from "@/components/form-loading";
 
 const startMonth = formatDate(startOfMonth(new Date()), "yyyy-MM-dd");
 const endMonth = formatDate(subDays(new Date(), 1), "yyyy-MM-dd");
@@ -39,6 +40,7 @@ export default async function ReceitasPage({
         <InputDate defaultValue={fim} name="fim" />
 
         <Button type="submit">
+          <FormLoading />
           <FilterIcon />
           Filtrar
         </Button>

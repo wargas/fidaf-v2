@@ -13,6 +13,7 @@ import { InputDate } from "@/components/input-date";
 import { ButtonGroup } from "@/components/ui/button-group";
 import { Suspense } from "react";
 import { SkeletonTable } from "@/components/skeleton-table";
+import { FormLoading } from "@/components/form-loading";
 
 const endMonth = formatDate(subDays(new Date(), 1), "yyyy-MM-dd");
 
@@ -29,6 +30,7 @@ export default async function MensalPage({
         <InputDate defaultValue={limit} name="limit" />
 
         <Button type="submit">
+          <FormLoading />
           <FilterIcon />
           Filtrar
         </Button>
