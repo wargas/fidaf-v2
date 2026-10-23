@@ -41,6 +41,8 @@ export default async function MensalPage({ searchParams }: PageProps<"/receitas"
     </div>
 }
 
+
+
 async function MensalData({ limit }: { limit: string }) {
     const data = await db
         .select()

@@ -40,7 +40,7 @@ export default async function Home(props: PageProps<"/">) {
         <CardContent>
           {/* <SkeletonChart /> */}
           <Suspense fallback={<SkeletonChart />}>
-            <DashboardData key={key.toString()} />
+            <DashboardData chave={key.toString()} />
           </Suspense>
         </CardContent>
       </Card>
@@ -48,7 +48,7 @@ export default async function Home(props: PageProps<"/">) {
   );
 }
 
-async function DashboardData({ key }: { key: string }) {
+async function DashboardData({ chave: key }: { chave: string }) {
   const data = await db
     .select()
     .from(recolhimentoDiario)
