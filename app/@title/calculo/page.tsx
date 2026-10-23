@@ -1,3 +1,3 @@
 export default function HomeTitle() {
-    return <div>CALCULO</div>
+  return <div>CALCULO</div>;
 }

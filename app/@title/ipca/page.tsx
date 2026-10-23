@@ -1,3 +1,3 @@
 export default function HomeTitle() {
-    return <div>IPCA</div>
+  return <div>IPCA</div>;
 }

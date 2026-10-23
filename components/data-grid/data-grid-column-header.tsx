@@ -39,7 +39,14 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { ChevronDownIcon, ChevronUpIcon, XIcon, PinOffIcon, PinIcon, EyeOffIcon } from "lucide-react";
+import {
+  ChevronDownIcon,
+  ChevronUpIcon,
+  XIcon,
+  PinOffIcon,
+  PinIcon,
+  EyeOffIcon,
+} from "lucide-react";
 
 interface DataGridColumnHeaderProps<
   TData extends RowData,
@@ -188,8 +195,7 @@ function DataGridColumnHeaderImpl<TData extends RowData, TValue>({
                 checked={column.getIsSorted() === "asc"}
                 onClick={() => onSortingChange("asc")}
               >
-                <ChevronUpIcon
-                />
+                <ChevronUpIcon />
                 Sort asc
               </DropdownMenuCheckboxItem>
               <DropdownMenuCheckboxItem
@@ -197,14 +203,12 @@ function DataGridColumnHeaderImpl<TData extends RowData, TValue>({
                 checked={column.getIsSorted() === "desc"}
                 onClick={() => onSortingChange("desc")}
               >
-                <ChevronDownIcon
-                />
+                <ChevronDownIcon />
                 Sort desc
               </DropdownMenuCheckboxItem>
               {column.getIsSorted() && (
                 <DropdownMenuItem onClick={onSortRemove}>
-                  <XIcon
-                  />
+                  <XIcon />
                   Remove sort
                 </DropdownMenuItem>
               )}
@@ -219,8 +223,7 @@ function DataGridColumnHeaderImpl<TData extends RowData, TValue>({
                   className="[&_svg]:text-muted-foreground"
                   onClick={onUnpin}
                 >
-                  <PinOffIcon
-                  />
+                  <PinOffIcon />
                   Unpin from left
                 </DropdownMenuItem>
               ) : (
@@ -228,8 +231,7 @@ function DataGridColumnHeaderImpl<TData extends RowData, TValue>({
                   className="[&_svg]:text-muted-foreground"
                   onClick={onLeftPin}
                 >
-                  <PinIcon
-                  />
+                  <PinIcon />
                   Pin to left
                 </DropdownMenuItem>
               )}
@@ -238,8 +240,7 @@ function DataGridColumnHeaderImpl<TData extends RowData, TValue>({
                   className="[&_svg]:text-muted-foreground"
                   onClick={onUnpin}
                 >
-                  <PinOffIcon
-                  />
+                  <PinOffIcon />
                   Unpin from right
                 </DropdownMenuItem>
               ) : (
@@ -247,8 +248,7 @@ function DataGridColumnHeaderImpl<TData extends RowData, TValue>({
                   className="[&_svg]:text-muted-foreground"
                   onClick={onRightPin}
                 >
-                  <PinIcon
-                  />
+                  <PinIcon />
                   Pin to right
                 </DropdownMenuItem>
               )}
@@ -261,8 +261,7 @@ function DataGridColumnHeaderImpl<TData extends RowData, TValue>({
                 className="[&_svg]:text-muted-foreground"
                 onClick={() => column.toggleVisibility(false)}
               >
-                <EyeOffIcon
-                />
+                <EyeOffIcon />
                 Hide column
               </DropdownMenuItem>
             </>

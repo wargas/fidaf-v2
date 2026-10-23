@@ -1,3 +1,3 @@
 export default function HomeTitle() {
-    return <div>RESUMO MENSAL</div>
+  return <div>RESUMO MENSAL</div>;
 }

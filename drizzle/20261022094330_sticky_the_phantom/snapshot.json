@@ -329,49 +329,37 @@
     {
       "table": "cargos",
       "name": "PRIMARY",
-      "columns": [
-        "nome"
-      ],
+      "columns": ["nome"],
       "entityType": "pks"
     },
     {
       "table": "codigos",
       "name": "PRIMARY",
-      "columns": [
-        "id"
-      ],
+      "columns": ["id"],
       "entityType": "pks"
     },
     {
       "table": "ipca",
       "name": "PRIMARY",
-      "columns": [
-        "id"
-      ],
+      "columns": ["id"],
       "entityType": "pks"
     },
     {
       "table": "recolhimento",
       "name": "PRIMARY",
-      "columns": [
-        "id"
-      ],
+      "columns": ["id"],
       "entityType": "pks"
     },
     {
       "table": "servidores",
       "name": "PRIMARY",
-      "columns": [
-        "id"
-      ],
+      "columns": ["id"],
       "entityType": "pks"
     },
     {
       "table": "validador",
       "name": "PRIMARY",
-      "columns": [
-        "codigo"
-      ],
+      "columns": ["codigo"],
       "entityType": "pks"
     },
     {

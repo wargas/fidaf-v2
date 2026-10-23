@@ -1,3 +1,3 @@
 export default function DefaultTitle() {
-    return <div></div>
+  return <div></div>;
 }

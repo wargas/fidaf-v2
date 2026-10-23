@@ -137,26 +137,22 @@ function ContextMenuImpl<TData extends RowData>({
         finalFocus={onFinalFocus}
       >
         <DropdownMenuItem onClick={onCopy}>
-          <CopyIcon
-          />
+          <CopyIcon />
           Copy
         </DropdownMenuItem>
         <DropdownMenuItem onClick={onCut} disabled={readOnly}>
-          <ScissorsIcon
-          />
+          <ScissorsIcon />
           Cut
         </DropdownMenuItem>
         <DropdownMenuItem onClick={onClear} disabled={readOnly}>
-          <EraserIcon
-          />
+          <EraserIcon />
           Clear
         </DropdownMenuItem>
         {canDeleteRows && (
           <>
             <DropdownMenuSeparator />
             <DropdownMenuItem variant="destructive" onClick={onDelete}>
-              <Trash2Icon
-              />
+              <Trash2Icon />
               Delete rows
             </DropdownMenuItem>
           </>

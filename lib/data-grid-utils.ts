@@ -471,8 +471,7 @@ export function getIsDataColumn(
 
 export function getColumnValueReader<TData extends RowData>(
   column:
-    | { accessorFn?: (original: TData, index: number) => unknown }
-    | undefined,
+    { accessorFn?: (original: TData, index: number) => unknown } | undefined,
 ): ColumnValueReader<TData> {
   const accessorFn = column?.accessorFn;
   return (row) => accessorFn?.(row.original, row.index);

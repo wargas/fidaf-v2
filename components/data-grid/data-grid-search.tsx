@@ -189,8 +189,7 @@ function DataGridSearchImpl<TData extends RowData>({
             onPointerDown={onTriggerPointerDown}
             disabled={matchCount === 0}
           >
-            <ChevronUp
-            />
+            <ChevronUp />
           </Button>
           <Button
             aria-label="Next match"
@@ -201,8 +200,7 @@ function DataGridSearchImpl<TData extends RowData>({
             onPointerDown={onTriggerPointerDown}
             disabled={matchCount === 0}
           >
-            <ChevronDown
-            />
+            <ChevronDown />
           </Button>
           <Button
             aria-label="Close search"
@@ -211,8 +209,7 @@ function DataGridSearchImpl<TData extends RowData>({
             className="size-7"
             onClick={onClose}
           >
-            <X
-            />
+            <X />
           </Button>
         </div>
       </div>

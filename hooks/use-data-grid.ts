@@ -121,8 +121,7 @@ type RowAddTrigger =
   | {
       reason: "add-row-press";
       event?:
-        | React.MouseEvent<HTMLDivElement>
-        | React.KeyboardEvent<HTMLDivElement>;
+        React.MouseEvent<HTMLDivElement> | React.KeyboardEvent<HTMLDivElement>;
     }
   | { reason: "insert-below"; event: KeyboardEvent; afterRowId: string }
   | { reason: "paste"; event?: undefined };
@@ -769,8 +768,7 @@ function useDataGrid<TData extends RowData>({
   const onRowAdd = React.useCallback(
     (
       event?:
-        | React.MouseEvent<HTMLDivElement>
-        | React.KeyboardEvent<HTMLDivElement>,
+        React.MouseEvent<HTMLDivElement> | React.KeyboardEvent<HTMLDivElement>,
     ) =>
       addRow(
         { reason: "add-row-press", event },
