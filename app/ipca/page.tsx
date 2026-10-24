@@ -19,7 +19,7 @@ export default async function IpcaPage({ searchParams }: PageProps<"/ipca">) {
   await searchParams;
 
   return (
-    <div className="h-full bg-red-300">
+    <div className="h-full">
       <Suspense fallback={<SkeletonTable />}>
         <IPCAData />
       </Suspense>
