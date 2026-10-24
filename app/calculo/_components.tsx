@@ -1,10 +1,9 @@
 "use client";
-import { ano_atual } from "@/lib/constants";
+
 import _ from "lodash";
 import { DataGrid as ReactDataGrid } from "react-data-grid";
 import "react-data-grid/lib/styles.css";
 
-const ano_anterior = ano_atual - 1;
 
 type Row = { label: string; value: string };
 

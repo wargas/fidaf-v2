@@ -1,1 +1,1 @@
-export const ano_atual = 2026;
+export const ano_atuals = 2026;

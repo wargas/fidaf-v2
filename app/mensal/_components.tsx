@@ -1,30 +1,10 @@
 "use client";
-import { DataGrid } from "@/components/data-grid/data-grid";
-import { Calendar } from "@/components/ui/calendar";
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupButton,
-  InputGroupInput,
-} from "@/components/ui/input-group";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { useDataGrid } from "@/hooks/use-data-grid";
-import { ano_atual } from "@/lib/constants";
-import { DataGridFeatures } from "@/lib/data-grid-features";
-import { ColumnDef } from "@tanstack/react-table";
 import { cn } from "cn";
-import { formatDate, parse, isValid } from "date-fns";
 import _, { sumBy } from "lodash";
-import { ArrowDown, ArrowUpZa, CalendarIcon, SortDesc } from "lucide-react";
-import { useCallback, useEffect, useState } from "react";
-import { DataGrid as ReactDataGrid, renderHeaderCell } from "react-data-grid";
+import { DataGrid as ReactDataGrid } from "react-data-grid";
 import "react-data-grid/lib/styles.css";
 
-const ano_anterior = ano_atual - 1;
+
 
 type Row = {
   mes: string;
@@ -53,7 +33,10 @@ type Row = {
 
 const impostos = ["iss", "iptu", "itbi", "adicional", "total"];
 
-export function DataGridMensal({ data }: { data: Row[] }) {
+export function DataGridMensal({ data, ano_atual }: { data: Row[], ano_atual:number }) {
+
+  const ano_anterior = ano_atual -  1;
+
   return (
     <ReactDataGrid
       style={{ height: "100%" }}

@@ -9,6 +9,8 @@ import { InputDate } from "@/components/input-date";
 import { Suspense } from "react";
 import { SkeletonTable } from "@/components/skeleton-table";
 import { FormLoading } from "@/components/form-loading";
+import { getConfig } from "@/lib/config";
+import { ano_atuals } from "@/lib/constants";
 
 const endMonth = formatDate(subDays(new Date(), 1), "yyyy-MM-dd");
 
@@ -16,6 +18,10 @@ export default async function MensalPage({
   searchParams,
 }: PageProps<"/receitas">) {
   const params = await searchParams;
+
+  const config = await getConfig()
+
+  const ano_atual = config.ano
 
   const limit = _.has(params, "limit") ? String(params.limit) : endMonth;
 
@@ -41,5 +47,5 @@ export default async function MensalPage({
 async function MensalData({ limit }: { limit: string }) {
   const meses = await Repository.receitasMensal(limit)
 
-  return <DataGridMensal data={meses as any} />;
+  return <DataGridMensal data={meses as any} ano_atual={ano_atuals} />;
 }

@@ -1,7 +1,9 @@
+'use client'
 import Link from "next/link";
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
@@ -17,9 +19,15 @@ import {
   ChartLine,
   DollarSign,
   HomeIcon,
+  Settings2Icon,
 } from "lucide-react";
+import { NavUser } from "./nav-user";
+import { authClient } from "@/lib/auth-client";
 
 export function AppSidebar() {
+
+  const { data } = authClient.useSession()
+
   return (
     <Sidebar collapsible="icon" variant="sidebar">
       <SidebarHeader>
@@ -87,10 +95,27 @@ export function AppSidebar() {
                   }
                 />
               </SidebarMenuItem>
+              {!!data?.user && (
+                <SidebarMenuItem>
+                  <SidebarMenuButton
+                    render={
+                      <Link href={`/settings`}>
+                        <Settings2Icon />
+                        Preferencias
+                      </Link>
+                    }
+                  />
+                </SidebarMenuItem>
+              )}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+      <SidebarFooter>
+
+        <NavUser />
+
+      </SidebarFooter>
     </Sidebar>
   );
 }

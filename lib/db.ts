@@ -1,11 +1,11 @@
 import { recolhimentoDiario } from "@/drizzle/schema";
 import { drizzle } from "drizzle-orm/mysql2";
 import { range, sumBy, filter } from "lodash";
-import { ano_atual } from "./constants";
 import { eachMonthOfInterval } from "date-fns";
 import { sql, or, between } from "drizzle-orm";
 import _ from "lodash";
 import humanNumber from "human-number";
+import { getConfig } from "./config";
 
 export const db = drizzle(process.env.DATABASE_URL!);
 
@@ -13,6 +13,9 @@ export class Repository {
 
     static async calculo(inicio: string, fim: string) {
         const meses = eachMonthOfInterval({ start: inicio, end: fim }).length - 1;
+        const config = await getConfig()
+
+        const ano_atual = config.ano
 
         const dataCorrente = await db
             .select({
@@ -32,7 +35,7 @@ export class Repository {
                 ),
             );
 
-        const refis = 31_243_248.2;
+        const refis = config.refis;
         const pontos = 495.15;
 
         const data: { label: string; value: string, valueHuman: string }[] = [];
@@ -170,6 +173,9 @@ export class Repository {
 
     static async receitasMensal(limit: string) {
         const data = await db.select().from(recolhimentoDiario);
+        const config = await getConfig()
+
+        const ano_atual = config.ano
 
         const lista = data
             .map((r) => ({

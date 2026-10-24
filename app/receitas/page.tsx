@@ -9,12 +9,12 @@ import { InputDate } from "@/components/input-date";
 import { Suspense } from "react";
 import { SkeletonTable } from "@/components/skeleton-table";
 import Link from "next/link";
-import { ano_atual } from "@/lib/constants";
 import { FormLoading } from "@/components/form-loading";
+import { getConfig } from "@/lib/config";
 
 const startMonth = formatDate(startOfMonth(new Date()), "yyyy-MM-dd");
 const endMonth = formatDate(subDays(new Date(), 1), "yyyy-MM-dd");
-const ano_anterior = ano_atual - 1;
+
 
 export default async function ReceitasPage({
   searchParams,
@@ -24,6 +24,11 @@ export default async function ReceitasPage({
   const fim = _.has(params, "fim") ? String(params.fim) : endMonth;
 
   const ano = parseInt(inicio.substring(0, 4));
+
+  const config = await getConfig()
+
+  const ano_atual = config.ano
+  const ano_anterior = ano_atual - 1;
 
   const urlCompare = `?inicio=${inicio}&fim=${fim}`.replaceAll(
     ano == ano_atual ? ano_atual.toString() : ano_anterior.toString(),

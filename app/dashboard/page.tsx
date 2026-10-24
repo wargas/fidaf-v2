@@ -8,11 +8,10 @@ import {
 } from "@/components/ui/card";
 import { ChartContainer } from "@/components/ui/chart";
 import { recolhimentoDiario } from "@/drizzle/schema";
-import { ano_atual } from "@/lib/constants";
 import { db, Repository } from "@/lib/db";
 import { range, sumBy, filter } from "lodash";
 import { BarChart } from "recharts";
-import { MainChart } from "../_components";
+import { MainChart } from "./_components";
 import { ButtonGroup } from "@/components/ui/button-group";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
@@ -23,7 +22,7 @@ import { SkeletonChart, SkeletonStats } from "./_components";
 import { Stat, StatIndicator, StatLabel, StatTrend, StatValue } from "@/components/ui/stat";
 import { DollarSign } from "lucide-react";
 import { formatDate } from "date-fns";
-import humanNumber from 'human-number'
+import { getConfig } from "@/lib/config";
 
 const _meses = range(1, 13).map((m) => m);
 
@@ -32,7 +31,7 @@ export default async function Home(props: PageProps<"/">) {
 
   return (
     <div className="p-4 flex flex-col gap-4">
-      
+
       <Suspense fallback={<SkeletonStats />}>
         <States />
       </Suspense>
@@ -94,6 +93,9 @@ export default async function Home(props: PageProps<"/">) {
 }
 
 async function DashboardData({ chave: key }: { chave: string }) {
+  const config = await getConfig()
+  const ano_atual = config.ano
+
   const data = await Repository.receitasMensal(`${ano_atual}-12-31`)
 
   return <MainChart data={data} />;
@@ -102,6 +104,9 @@ async function DashboardData({ chave: key }: { chave: string }) {
 const now = formatDate(new Date(), 'yyyy-MM-dd')
 
 async function States() {
+  const config = await getConfig()
+
+  const ano_atual = config.ano
   const data = await Repository.calculo(`${ano_atual}-01-01`, now)
 
   return <div className="grid grid-cols-4 gap-2">
@@ -110,7 +115,7 @@ async function States() {
       <StatIndicator variant={'icon'}>
         <DollarSign />
       </StatIndicator>
-      <StatValue>{data.at(2)?.valueHuman}</StatValue>      
+      <StatValue>{data.at(2)?.valueHuman}</StatValue>
     </Stat>
 
     <Stat>
@@ -137,6 +142,6 @@ async function States() {
       <StatValue>{data.at(9)?.valueHuman}</StatValue>
     </Stat>
 
-    
+
   </div>
 }

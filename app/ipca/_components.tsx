@@ -1,20 +1,22 @@
 "use client";
 import { useDataGrid } from "@/hooks/use-data-grid";
-import { ano_atual } from "@/lib/constants";
 import { useState } from "react";
 
 import { DataGrid as ReactDataGrid, SelectColumn } from "react-data-grid";
 import "react-data-grid/lib/styles.css";
 
-const ano_anterior = ano_atual - 1;
+
 
 type Row = {
   mes: string;
-  [ano_atual]: number | string;
-  [ano_anterior]: number | string;
+  ano_atual: number | string;
+  ano_anterior: number | string;
 };
 
-export function DataGridIPCA({ meses }: { meses: Row[] }) {
+export function DataGridIPCA({ meses, ano_atual }: { meses: Row[], ano_atual: number }) {
+
+  const ano_anterior = ano_atual - 1
+
   return (
     <div className="h-full">
       <ReactDataGrid
@@ -26,13 +28,13 @@ export function DataGridIPCA({ meses }: { meses: Row[] }) {
           // SelectColumn,
           { key: "mes", name: "MES", width: 100, sortable: true },
           {
-            key: ano_anterior.toString(),
-            name: ano_anterior.toString(),
+            key: 'ano_anterior',
+            name: 'ano_anterior',
             width: 100,
           },
           {
-            key: ano_atual.toString(),
-            name: ano_atual.toString(),
+            key: 'ano_atual',
+            name: 'ano_atual',
             width: 100,
             editable: true,
           },

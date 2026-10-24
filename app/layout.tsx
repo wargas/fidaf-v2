@@ -9,6 +9,7 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
+import { Toaster } from "@/components/ui/toast";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -53,6 +54,7 @@ export default function RootLayout({ children, title }: LayoutProps<"/">) {
               </div>
             </SidebarInset>
           </SidebarProvider>
+          <Toaster />
         </TooltipProvider>
       </body>
     </html>
