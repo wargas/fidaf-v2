@@ -16,3 +16,11 @@ export function SkeletonChart() {
     </div>
   );
 }
+
+export function SkeletonStats() {
+  return <div className="grid grid-cols-4 gap-2">
+    {Array(4).fill(1).map((_,i) => (
+      <Skeleton key={i} className="h-20" />
+    ))}
+  </div>
+}

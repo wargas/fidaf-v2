@@ -1,11 +1,3 @@
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import { ipca } from "@/drizzle/schema";
 import { ano_atual } from "@/lib/constants";
 import { db } from "@/lib/db";

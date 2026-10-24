@@ -9,7 +9,7 @@ import {
 import { ChartContainer } from "@/components/ui/chart";
 import { recolhimentoDiario } from "@/drizzle/schema";
 import { ano_atual } from "@/lib/constants";
-import { db } from "@/lib/db";
+import { db, Repository } from "@/lib/db";
 import { range, sumBy, filter } from "lodash";
 import { BarChart } from "recharts";
 import { MainChart } from "../_components";
@@ -19,7 +19,11 @@ import Link from "next/link";
 import { cn } from "cn";
 import { Suspense } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
-import { SkeletonChart } from "./_components";
+import { SkeletonChart, SkeletonStats } from "./_components";
+import { Stat, StatIndicator, StatLabel, StatTrend, StatValue } from "@/components/ui/stat";
+import { DollarSign } from "lucide-react";
+import { formatDate } from "date-fns";
+import humanNumber from 'human-number'
 
 const _meses = range(1, 13).map((m) => m);
 
@@ -27,7 +31,11 @@ export default async function Home(props: PageProps<"/">) {
   const { key = "total" } = await props.searchParams;
 
   return (
-    <div className="p-4">
+    <div className="p-4 flex flex-col gap-4">
+      
+      <Suspense fallback={<SkeletonStats />}>
+        <States />
+      </Suspense>
       <Card>
         <CardHeader>
           <CardTitle>Arrecadacao Mensal</CardTitle>
@@ -86,73 +94,49 @@ export default async function Home(props: PageProps<"/">) {
 }
 
 async function DashboardData({ chave: key }: { chave: string }) {
-  const data = await db.select().from(recolhimentoDiario);
+  const data = await Repository.receitasMensal(`${ano_atual}-12-31`)
 
-  const lista = data.map((r) => ({
-    ...r,
-    nominal: parseFloat(String(r.nominal)),
-    corrigido: parseFloat(String(r.corrigido)),
-    dia: parseInt(r.data!.replace(/(\d+)-(\d+)-(\d+)/, "$3")),
-    mes: parseInt(r.data!.replace(/(\d+)-(\d+)-(\d+)/, "$2")),
-    ano: parseInt(r.data!.replace(/(\d+)-(\d+)-(\d+)/, "$1")),
-    dia_ano: r.data!.replace(/(\d+)-(\d+)-(\d+)/, "$2-$3"),
-  }));
+  return <MainChart data={data} />;
+}
 
-  const meses = _meses
-    .map((mes) => {
-      return {
-        mes: mes.toString().padStart(2, "0"),
-        iss: {
-          anterior: sumBy(
-            filter(lista, { mes, imposto: "ISS", ano: ano_atual - 1 }),
-            "corrigido",
-          ),
-          corrente: sumBy(
-            filter(lista, { mes, imposto: "ISS", ano: ano_atual }),
-            "corrigido",
-          ),
-        },
-        iptu: {
-          anterior: sumBy(
-            filter(lista, { mes, imposto: "IPTU", ano: ano_atual - 1 }),
-            "corrigido",
-          ),
-          corrente: sumBy(
-            filter(lista, { mes, imposto: "IPTU", ano: ano_atual }),
-            "corrigido",
-          ),
-        },
-        itbi: {
-          anterior: sumBy(
-            filter(lista, { mes, imposto: "ITBI", ano: ano_atual - 1 }),
-            "corrigido",
-          ),
-          corrente: sumBy(
-            filter(lista, { mes, imposto: "ITBI", ano: ano_atual }),
-            "corrigido",
-          ),
-        },
-        adicional: {
-          anterior: sumBy(
-            filter(lista, { mes, imposto: "JUROS MULTAS", ano: ano_atual - 1 }),
-            "corrigido",
-          ),
-          corrente: sumBy(
-            filter(lista, { mes, imposto: "JUROS MULTAS", ano: ano_atual }),
-            "corrigido",
-          ),
-        },
-        total: {
-          anterior: sumBy(
-            filter(lista, { mes, ano: ano_atual - 1 }),
-            "corrigido",
-          ),
-          corrente: sumBy(filter(lista, { mes, ano: ano_atual }), "corrigido"),
-        },
-      };
-    })
-    .map((r) => ({ ...r, diferenca: r.total.corrente - r.total.anterior }))
-    .filter((m) => m.total.anterior > 0 || m.total.corrente > 0);
+const now = formatDate(new Date(), 'yyyy-MM-dd')
 
-  return <MainChart data={meses} />;
+async function States() {
+  const data = await Repository.calculo(`${ano_atual}-01-01`, now)
+
+  return <div className="grid grid-cols-4 gap-2">
+    <Stat>
+      <StatLabel>Incremento atual</StatLabel>
+      <StatIndicator variant={'icon'}>
+        <DollarSign />
+      </StatIndicator>
+      <StatValue>{data.at(2)?.valueHuman}</StatValue>      
+    </Stat>
+
+    <Stat>
+      <StatLabel>Valor a distribuir</StatLabel>
+      <StatIndicator variant={'icon'}>
+        <DollarSign />
+      </StatIndicator>
+      <StatValue>{data.at(5)?.valueHuman}</StatValue>
+    </Stat>
+
+    <Stat>
+      <StatLabel>Valor auditor</StatLabel>
+      <StatIndicator variant={'icon'}>
+        <DollarSign />
+      </StatIndicator>
+      <StatValue>{data.at(8)?.valueHuman}</StatValue>
+    </Stat>
+
+    <Stat>
+      <StatLabel>Valor analista</StatLabel>
+      <StatIndicator variant={'icon'}>
+        <DollarSign />
+      </StatIndicator>
+      <StatValue>{data.at(9)?.valueHuman}</StatValue>
+    </Stat>
+
+    
+  </div>
 }

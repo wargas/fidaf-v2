@@ -1,12 +1,10 @@
-import { recolhimentoDiario } from "@/drizzle/schema";
-import { db } from "@/lib/db";
-import _, { sumBy } from "lodash";
+import { Repository, db } from "@/lib/db";
+import _ from "lodash";
 import { DataGridReceitas } from "./_components";
 import Form from "next/form";
 import { Button } from "@/components/ui/button";
 import { FilterIcon } from "lucide-react";
 import { formatDate, startOfMonth, subDays } from "date-fns";
-import { between } from "drizzle-orm";
 import { InputDate } from "@/components/input-date";
 import { Suspense } from "react";
 import { SkeletonTable } from "@/components/skeleton-table";
@@ -63,60 +61,6 @@ export default async function ReceitasPage({
 }
 
 async function ReceitasData({ inicio, fim }: { inicio: string; fim: string }) {
-  const data = await db
-    .select()
-    .from(recolhimentoDiario)
-    .where(between(recolhimentoDiario.data, inicio, fim));
-
-  const dias = Object.keys(_.groupBy(data, "data"))
-    .map((dia) => {
-      const receitas = _.filter(data, { data: dia }).map((i) => ({
-        ...i,
-        nominal: parseFloat(String(i.nominal)),
-        corrigido: parseFloat(String(i.corrigido)),
-      }));
-
-      const total = {
-        corrigido: sumBy(receitas, "corrigido"),
-        nominal: sumBy(receitas, "nominal"),
-      };
-
-      const iss = {
-        corrigido: sumBy(_.filter(receitas, { imposto: "ISS" }), "corrigido"),
-        nominal: sumBy(_.filter(receitas, { imposto: "ISS" }), "nominal"),
-      };
-
-      const iptu = {
-        corrigido: sumBy(_.filter(receitas, { imposto: "IPTU" }), "corrigido"),
-        nominal: sumBy(_.filter(receitas, { imposto: "IPTU" }), "nominal"),
-      };
-
-      const itbi = {
-        corrigido: sumBy(_.filter(receitas, { imposto: "ITBI" }), "corrigido"),
-        nominal: sumBy(_.filter(receitas, { imposto: "ITBI" }), "nominal"),
-      };
-
-      const adicional = {
-        corrigido: sumBy(
-          _.filter(receitas, { imposto: "JUROS MULTAS" }),
-          "corrigido",
-        ),
-        nominal: sumBy(
-          _.filter(receitas, { imposto: "JUROS MULTAS" }),
-          "nominal",
-        ),
-      };
-
-      return {
-        dia,
-        total,
-        iss,
-        iptu,
-        itbi,
-        adicional,
-        // receitas
-      };
-    })
-    .filter((d) => d.total.nominal > 0);
-  return <DataGridReceitas data={dias as any} />;
+  const data = await Repository.receitasDiario(inicio, fim)
+  return <DataGridReceitas data={data as any} />;
 }

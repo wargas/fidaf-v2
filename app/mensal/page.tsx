@@ -1,16 +1,11 @@
-import { ipca, recolhimentoDiario } from "@/drizzle/schema";
-import { ano_atual } from "@/lib/constants";
-import { db } from "@/lib/db";
-import _, { filter, range, sumBy } from "lodash";
+import { Repository } from "@/lib/db";
+import _ from "lodash";
 import { DataGridMensal } from "./_components";
 import Form from "next/form";
 import { Button } from "@/components/ui/button";
 import { FilterIcon } from "lucide-react";
-import { formatDate, startOfMonth, subDays } from "date-fns";
-import { between } from "drizzle-orm";
-import qs from "querystring";
+import { formatDate, subDays } from "date-fns";
 import { InputDate } from "@/components/input-date";
-import { ButtonGroup } from "@/components/ui/button-group";
 import { Suspense } from "react";
 import { SkeletonTable } from "@/components/skeleton-table";
 import { FormLoading } from "@/components/form-loading";
@@ -44,76 +39,7 @@ export default async function MensalPage({
 }
 
 async function MensalData({ limit }: { limit: string }) {
-  const data = await db.select().from(recolhimentoDiario);
-
-  const lista = data
-    .map((r) => ({
-      ...r,
-      nominal: parseFloat(String(r.nominal)),
-      corrigido: parseFloat(String(r.corrigido)),
-      dia: parseInt(r.data!.replace(/(\d+)-(\d+)-(\d+)/, "$3")),
-      mes: parseInt(r.data!.replace(/(\d+)-(\d+)-(\d+)/, "$2")),
-      ano: parseInt(r.data!.replace(/(\d+)-(\d+)-(\d+)/, "$1")),
-      dia_ano: r.data!.replace(/(\d+)-(\d+)-(\d+)/, "$2-$3"),
-    }))
-    .filter((r) => r.dia_ano <= limit.substring(5));
-
-  const meses = range(1, 13)
-    .map((m) => m)
-    .map((mes) => {
-      return {
-        mes: mes.toString().padStart(2, "0"),
-        iss: {
-          anterior: sumBy(
-            filter(lista, { mes, imposto: "ISS", ano: ano_atual - 1 }),
-            "corrigido",
-          ),
-          corrente: sumBy(
-            filter(lista, { mes, imposto: "ISS", ano: ano_atual }),
-            "corrigido",
-          ),
-        },
-        iptu: {
-          anterior: sumBy(
-            filter(lista, { mes, imposto: "IPTU", ano: ano_atual - 1 }),
-            "corrigido",
-          ),
-          corrente: sumBy(
-            filter(lista, { mes, imposto: "IPTU", ano: ano_atual }),
-            "corrigido",
-          ),
-        },
-        itbi: {
-          anterior: sumBy(
-            filter(lista, { mes, imposto: "ITBI", ano: ano_atual - 1 }),
-            "corrigido",
-          ),
-          corrente: sumBy(
-            filter(lista, { mes, imposto: "ITBI", ano: ano_atual }),
-            "corrigido",
-          ),
-        },
-        adicional: {
-          anterior: sumBy(
-            filter(lista, { mes, imposto: "JUROS MULTAS", ano: ano_atual - 1 }),
-            "corrigido",
-          ),
-          corrente: sumBy(
-            filter(lista, { mes, imposto: "JUROS MULTAS", ano: ano_atual }),
-            "corrigido",
-          ),
-        },
-        total: {
-          anterior: sumBy(
-            filter(lista, { mes, ano: ano_atual - 1 }),
-            "corrigido",
-          ),
-          corrente: sumBy(filter(lista, { mes, ano: ano_atual }), "corrigido"),
-        },
-      };
-    })
-    .map((r) => ({ ...r, diferenca: r.total.corrente - r.total.anterior }))
-    .filter((m) => m.total.anterior > 0 || m.total.corrente > 0);
+  const meses = await Repository.receitasMensal(limit)
 
   return <DataGridMensal data={meses as any} />;
 }
