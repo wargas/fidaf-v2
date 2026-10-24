@@ -33,9 +33,9 @@ type Row = {
 
 const impostos = ["iss", "iptu", "itbi", "adicional", "total"];
 
-export function DataGridMensal({ data, ano_atual }: { data: Row[], ano_atual:number }) {
+export function DataGridMensal({ data, ano_atual }: { data: Row[], ano_atual: number }) {
 
-  const ano_anterior = ano_atual -  1;
+  const ano_anterior = ano_atual - 1;
 
   return (
     <ReactDataGrid
@@ -71,13 +71,13 @@ export function DataGridMensal({ data, ano_atual }: { data: Row[], ano_atual:num
                   {" "}
                   {parseFloat(
                     String(_.get(props, `row.${i}.anterior`)),
-                  ).toLocaleString()}
+                  ).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                 </div>
               ),
               renderSummaryCell(props: any) {
                 return (
                   <div className="text-right font-bold">
-                    {sumBy(data, `${i}.anterior`).toLocaleString()}
+                    {sumBy(data, `${i}.anterior`).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                   </div>
                 );
               },
@@ -93,13 +93,13 @@ export function DataGridMensal({ data, ano_atual }: { data: Row[], ano_atual:num
                   {" "}
                   {parseFloat(
                     String(_.get(props, `row.${i}.corrente`)),
-                  ).toLocaleString()}
+                  ).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                 </div>
               ),
               renderSummaryCell(props: any) {
                 return (
                   <div className="text-right font-bold">
-                    {sumBy(data, `${i}.corrente`).toLocaleString()}
+                    {sumBy(data, `${i}.corrente`).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                   </div>
                 );
               },
@@ -117,7 +117,7 @@ export function DataGridMensal({ data, ano_atual }: { data: Row[], ano_atual:num
                   "text-red-600": total < 0,
                 })}
               >
-                {total.toLocaleString()}
+                {total.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
               </div>
             );
           },
@@ -129,7 +129,7 @@ export function DataGridMensal({ data, ano_atual }: { data: Row[], ano_atual:num
                   "text-red-600": total < 0,
                 })}
               >
-                {total.toLocaleString()}
+                {total.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
               </div>
             );
           },

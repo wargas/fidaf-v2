@@ -62,13 +62,13 @@ export function DataGridReceitas({ data }: { data: Row[] }) {
                   {" "}
                   {parseFloat(
                     String(_.get(props, `row.${i}.nominal`)),
-                  ).toLocaleString()}
+                  ).toLocaleString('pt-BR', {maximumFractionDigits: 2, minimumFractionDigits: 2})}
                 </div>
               ),
               renderSummaryCell(props: any) {
                 return (
                   <div className="text-right font-bold">
-                    {sumBy(data, `${i}.nominal`).toLocaleString()}
+                    {sumBy(data, `${i}.nominal`).toLocaleString('pt-BR', {maximumFractionDigits: 2, minimumFractionDigits: 2})}
                   </div>
                 );
               },
@@ -81,13 +81,13 @@ export function DataGridReceitas({ data }: { data: Row[] }) {
                   {" "}
                   {parseFloat(
                     String(_.get(props, `row.${i}.corrigido`)),
-                  ).toLocaleString()}
+                  ).toLocaleString('pt-BR', {maximumFractionDigits: 2, minimumFractionDigits: 2})}
                 </div>
               ),
               renderSummaryCell(props: any) {
                 return (
                   <div className="text-right font-bold">
-                    {sumBy(data, `${i}.corrigido`).toLocaleString()}
+                    {sumBy(data, `${i}.corrigido`).toLocaleString('pt-BR', {maximumFractionDigits: 2, minimumFractionDigits: 2})}
                   </div>
                 );
               },
