@@ -1,5 +1,3 @@
-import { recolhimentoDiario } from "@/drizzle/schema";
-import { ano_atual } from "@/lib/constants";
 import { db, Repository } from "@/lib/db";
 import _ from "lodash";
 import { DataGridCalculo } from "./_components";
