@@ -7,7 +7,6 @@ import "react-data-grid/lib/styles.css";
 
 type Row = { label: string; value: string };
 
-const impostos = ["iss", "iptu", "itbi", "adicional", "total"];
 
 export function DataGridCalculo({ data }: { data: Row[] }) {
   return (

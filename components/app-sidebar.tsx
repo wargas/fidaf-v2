@@ -20,6 +20,7 @@ import {
   DollarSign,
   HomeIcon,
   Settings2Icon,
+  User2Icon,
 } from "lucide-react";
 import { NavUser } from "./nav-user";
 import { authClient } from "@/lib/auth-client";
@@ -84,7 +85,7 @@ export function AppSidebar() {
                   }
                 />
               </SidebarMenuItem>
-              <SidebarSeparator />
+              
               <SidebarMenuItem>
                 <SidebarMenuButton
                   render={
@@ -96,16 +97,29 @@ export function AppSidebar() {
                 />
               </SidebarMenuItem>
               {!!data?.user && (
-                <SidebarMenuItem>
-                  <SidebarMenuButton
-                    render={
-                      <Link href={`/settings`}>
-                        <Settings2Icon />
-                        Preferencias
-                      </Link>
-                    }
-                  />
-                </SidebarMenuItem>
+                <>
+                <SidebarSeparator />
+                  <SidebarMenuItem>
+                    <SidebarMenuButton
+                      render={
+                        <Link href={`/settings`}>
+                          <Settings2Icon />
+                          Preferencias
+                        </Link>
+                      }
+                    />
+                  </SidebarMenuItem>
+                  <SidebarMenuItem>
+                    <SidebarMenuButton
+                      render={
+                        <Link href={`/users`}>
+                          <User2Icon />
+                          Usuarios
+                        </Link>
+                      }
+                    />
+                  </SidebarMenuItem>
+                </>
               )}
             </SidebarMenu>
           </SidebarGroupContent>

@@ -1,4 +1,5 @@
 "use client";
+import { useTableResize } from "@/lib/table-resize";
 import { cn } from "cn";
 import _, { sumBy } from "lodash";
 import { DataGrid as ReactDataGrid } from "react-data-grid";
@@ -35,17 +36,19 @@ const impostos = ["iss", "iptu", "itbi", "adicional", "total"];
 
 export function DataGridMensal({ data, ano_atual }: { data: Row[], ano_atual: number }) {
 
-  const ano_anterior = ano_atual - 1;
-
+  const props = useTableResize(data.length + 3)
+  const ano_anterior = ano_atual - 1
+  
   return (
     <ReactDataGrid
-      style={{ height: "100%" }}
+      style={props.style}
       bottomSummaryRows={[
         {
           id: "total-0",
           total: 0,
         },
       ]}
+      rowHeight={props.rowHeight}
       columns={[
         {
           key: "mes",

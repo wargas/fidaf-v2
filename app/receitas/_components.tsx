@@ -1,4 +1,5 @@
 "use client";
+import { useTableResize } from "@/lib/table-resize";
 import _, { sumBy } from "lodash";
 import { DataGrid as ReactDataGrid } from "react-data-grid";
 import "react-data-grid/lib/styles.css";
@@ -31,9 +32,11 @@ type Row = {
 const impostos = ["iss", "iptu", "itbi", "adicional", "total"];
 
 export function DataGridReceitas({ data }: { data: Row[] }) {
+  const props = useTableResize(data.length + 3)
   return (
+
     <ReactDataGrid
-      style={{ height: "100%" }}
+      {...props}
       bottomSummaryRows={[
         {
           id: "total-0",
@@ -62,13 +65,13 @@ export function DataGridReceitas({ data }: { data: Row[] }) {
                   {" "}
                   {parseFloat(
                     String(_.get(props, `row.${i}.nominal`)),
-                  ).toLocaleString('pt-BR', {maximumFractionDigits: 2, minimumFractionDigits: 2})}
+                  ).toLocaleString('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 })}
                 </div>
               ),
               renderSummaryCell(props: any) {
                 return (
                   <div className="text-right font-bold">
-                    {sumBy(data, `${i}.nominal`).toLocaleString('pt-BR', {maximumFractionDigits: 2, minimumFractionDigits: 2})}
+                    {sumBy(data, `${i}.nominal`).toLocaleString('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 })}
                   </div>
                 );
               },
@@ -81,13 +84,13 @@ export function DataGridReceitas({ data }: { data: Row[] }) {
                   {" "}
                   {parseFloat(
                     String(_.get(props, `row.${i}.corrigido`)),
-                  ).toLocaleString('pt-BR', {maximumFractionDigits: 2, minimumFractionDigits: 2})}
+                  ).toLocaleString('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 })}
                 </div>
               ),
               renderSummaryCell(props: any) {
                 return (
                   <div className="text-right font-bold">
-                    {sumBy(data, `${i}.corrigido`).toLocaleString('pt-BR', {maximumFractionDigits: 2, minimumFractionDigits: 2})}
+                    {sumBy(data, `${i}.corrigido`).toLocaleString('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 })}
                   </div>
                 );
               },

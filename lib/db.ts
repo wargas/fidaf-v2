@@ -12,7 +12,10 @@ export const db = drizzle(process.env.DATABASE_URL!);
 export class Repository {
 
     static async calculo(inicio: string, fim: string) {
-        const meses = eachMonthOfInterval({ start: inicio, end: fim }).length - 1;
+        const meses = eachMonthOfInterval({ start: inicio, end: fim }).length;
+
+        console.log(meses, inicio, fim)
+
         const config = await getConfig()
 
         const ano_atual = config.ano

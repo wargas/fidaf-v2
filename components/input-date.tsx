@@ -91,6 +91,7 @@ export function InputDate({
           mode="single"
           selected={selected}
           onSelect={setSelected}
+          captionLayout="dropdown"
         />
       </PopoverContent>
     </Popover>
