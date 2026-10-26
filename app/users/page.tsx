@@ -4,7 +4,9 @@ import { DataGridUsers, FormUser } from "./_components"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 
-export default async function UsersPage() {
+export default async function UsersPage({ searchParams}: PageProps<"/users">) {
+    
+    await searchParams;
 
     const users = await db.select().from(user)
 
