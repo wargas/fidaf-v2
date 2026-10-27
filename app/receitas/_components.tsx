@@ -1,6 +1,7 @@
 "use client";
 import { useTableResize } from "@/lib/table-resize";
 import _, { sumBy } from "lodash";
+import { useTheme } from "next-themes";
 import { DataGrid as ReactDataGrid } from "react-data-grid";
 import "react-data-grid/lib/styles.css";
 
@@ -33,10 +34,15 @@ const impostos = ["iss", "iptu", "itbi", "adicional", "total"];
 
 export function DataGridReceitas({ data }: { data: Row[] }) {
   const props = useTableResize(data.length + 3)
+  const { theme } = useTheme()
+
+  
+
   return (
 
     <ReactDataGrid
       {...props}
+      className={`rdg-${theme}`}
       bottomSummaryRows={[
         {
           id: "total-0",

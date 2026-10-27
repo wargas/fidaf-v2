@@ -10,6 +10,8 @@ import {
 } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import { Toaster } from "@/components/ui/toast";
+import { ThemeProvider } from "next-themes"
+import { ToggleTheme } from "@/components/toggle-theme";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -31,6 +33,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children, title }: LayoutProps<"/">) {
   return (
     <html
+      suppressHydrationWarning
       lang="en"
       className={cn(
         "h-full",
@@ -42,20 +45,24 @@ export default function RootLayout({ children, title }: LayoutProps<"/">) {
       )}
     >
       <body className="min-h-full flex flex-col">
-        <TooltipProvider>
-          <SidebarProvider>
-            <AppSidebar />
-            <SidebarInset className="relative">
-              <div className="left-0 right-0 top-0 h-14 flex items-center px-2 border-b">
-                <SidebarTrigger /> {title}
-              </div>
-              <div className="absolute inset-0 top-14 overflow-y-auto">
-                {children}
-              </div>
-            </SidebarInset>
-          </SidebarProvider>
-          <Toaster />
-        </TooltipProvider>
+        <ThemeProvider  attribute={"class"} defaultTheme="system" enableSystem disableTransitionOnChange>
+          <TooltipProvider>
+            <SidebarProvider>
+              <AppSidebar />
+              <SidebarInset className="relative">
+                <div className="left-0 right-0 top-0 h-14 flex items-center px-2 border-b">
+                  <SidebarTrigger /> {title}
+                  <div className="ml-auto"></div>
+                  <ToggleTheme />
+                </div>
+                <div className="absolute inset-0 top-14 overflow-y-auto">
+                  {children}
+                </div>
+              </SidebarInset>
+            </SidebarProvider>
+            <Toaster />
+          </TooltipProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

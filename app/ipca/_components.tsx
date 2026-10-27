@@ -1,5 +1,6 @@
 "use client";
 import { useDataGrid } from "@/hooks/use-data-grid";
+import { useTheme } from "next-themes";
 import { useState } from "react";
 
 import { DataGrid as ReactDataGrid, SelectColumn } from "react-data-grid";
@@ -15,14 +16,13 @@ type Row = {
 
 export function DataGridIPCA({ meses, ano_atual }: { meses: Row[], ano_atual: number }) {
 
-  const ano_anterior = ano_atual - 1
+  const { theme } = useTheme()
 
   return (
     <div className="h-full">
       <ReactDataGrid
-        // selectedRows={selecteds}
-        // onSelectedRowsChange={rows => setSelecteds(rows)}
         style={{ height: "100%" }}
+        className={`rdg-${theme ?? 'light'}`}
         rowKeyGetter={(row) => parseInt(row.mes)}
         columns={[
           // SelectColumn,

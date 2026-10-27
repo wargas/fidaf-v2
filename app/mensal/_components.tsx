@@ -2,6 +2,7 @@
 import { useTableResize } from "@/lib/table-resize";
 import { cn } from "cn";
 import _, { sumBy } from "lodash";
+import { useTheme } from "next-themes";
 import { DataGrid as ReactDataGrid } from "react-data-grid";
 import "react-data-grid/lib/styles.css";
 
@@ -38,10 +39,14 @@ export function DataGridMensal({ data, ano_atual }: { data: Row[], ano_atual: nu
 
   const props = useTableResize(data.length + 3)
   const ano_anterior = ano_atual - 1
+
+  const { theme } = useTheme()
+
   
   return (
     <ReactDataGrid
       style={props.style}
+      className={`rdg-${theme}`}
       bottomSummaryRows={[
         {
           id: "total-0",

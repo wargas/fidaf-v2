@@ -12,7 +12,7 @@ export default async function UsersPage({ searchParams}: PageProps<"/users">) {
 
     return <div>
         <div className="flex items-center justify-end p-4">
-            <Button variant={`outline`} render={<Link href={`users?action=add`}>Adicionar</Link>} />
+            <Button nativeButton={false} variant={`outline`} render={<Link href={`users?action=add`}>Adicionar</Link>} />
         </div>
         <DataGridUsers data={users} />
         <FormUser />

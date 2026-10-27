@@ -16,6 +16,7 @@ import { toast } from "@/components/ui/toast";
 import { authClient } from "@/lib/auth-client";
 import { email, z } from "zod";
 import { Trash2 } from "lucide-react";
+import { useTheme } from "next-themes";
 
 
 type Row = typeof user.$inferInsert
@@ -23,11 +24,9 @@ type Row = typeof user.$inferInsert
 export function DataGridUsers({ data }: { data: Row[] }) {
 
   const props = useTableResize(data.length + 3)
+  const { theme } = useTheme()
 
   async function deleteUser(user: Row) {
-
-    
-
     toast.add({
       description: `user deletado com sucesso`
     })
@@ -35,15 +34,18 @@ export function DataGridUsers({ data }: { data: Row[] }) {
 
   return (
     <ReactDataGrid
+      className={`rdg-${theme}`}
       style={props.style}
       rowHeight={props.rowHeight}
       columns={[
         { key: 'id', name: 'ID', resizable: true },
         { key: 'name', name: 'NOME' },
         { key: 'email', name: 'Email' },
-        { key: 'id', name: '', renderCell: props => <div className="flex justify-end">
-          <Button onClick={() => deleteUser(props.row)} variant={'ghost'}><Trash2 /></Button>
-        </div>}
+        {
+          key: 'id2', name: '', renderCell: props => <div className="flex justify-end">
+            <Button onClick={() => deleteUser(props.row)} variant={'ghost'}><Trash2 /></Button>
+          </div>
+        }
       ]}
       rows={data}
     />
@@ -69,14 +71,14 @@ export function FormUser() {
       email: "",
       password: ""
     },
-    
+
   })
 
   async function handleSubmit(data: User) {
 
     const input = schemaUser.safeParse(data)
 
-    if(input.error) {
+    if (input.error) {
       toast.add({
         type: 'error',
         description: input.error.message
@@ -94,7 +96,7 @@ export function FormUser() {
       password: data.password,
     })
 
-    if(insert.error) {
+    if (insert.error) {
       toast.add({
         type: 'error',
         description: insert.error.message
