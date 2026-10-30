@@ -39,7 +39,7 @@ export class Repository {
             );
 
         const refis = config.refis;
-        const pontos = 495.15;
+        const pontos = 490.67;
 
         const data: { label: string; value: string, valueHuman: string }[] = [];
 
