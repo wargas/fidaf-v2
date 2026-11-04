@@ -5,6 +5,7 @@ import {
     Bell,
     ChevronsUpDown,
     CreditCard,
+    KeyRound,
     LogInIcon,
     LogOut,
     Sparkles,
@@ -35,12 +36,14 @@ import { useRouter } from "next/navigation"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "./ui/dialog"
 import { useState } from "react"
 import { LoginForm } from "@/components/login-form"
+import { ChangePasswordDialog } from "@/components/change-password-dialog"
 
 export function NavUser() {
     const { isMobile } = useSidebar()
     const { data } = authClient.useSession()
     const router = useRouter()
     const [open, setOpen] = useState(false)
+    const [changePasswordOpen, setChangePasswordOpen] = useState(false)
 
 
     const user = data?.user
@@ -108,6 +111,10 @@ export function NavUser() {
                                         <BadgeCheck />
                                         Conta
                                     </DropdownMenuItem>
+                                    <DropdownMenuItem onClick={() => setChangePasswordOpen(true)}>
+                                        <KeyRound />
+                                        Alterar senha
+                                    </DropdownMenuItem>
                                     {/* <DropdownMenuItem>
                                 <CreditCard />
                                 Billing
@@ -137,6 +144,11 @@ export function NavUser() {
                     <LoginForm />
                 </DialogContent>
             </Dialog>
+
+            <ChangePasswordDialog
+                open={changePasswordOpen && !!user}
+                onOpenChange={setChangePasswordOpen}
+            />
         </>
     )
 }
