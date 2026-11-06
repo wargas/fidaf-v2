@@ -10,6 +10,10 @@ import "react-data-grid/lib/styles.css";
 
 type Row = {
   mes: string;
+  dias: {
+    anterior: number,
+    corrente: number
+  }
   iss: {
     anterior: number;
     corrente: number;
@@ -63,6 +67,16 @@ export function DataGridMensal({ data, ano_atual }: { data: Row[], ano_atual: nu
             return <div className="font-bold">TOTAL</div>;
           },
           frozen: "start",
+        },
+        {
+          key: 'dia',
+          name: 'DIAS',
+          children: [
+            {key: 'dias.anterior', name: ano_anterior.toString(), renderCell: (p) => <div>{p.row.dias.anterior}</div>},
+            {key: 'dias.corrente', name: ano_atual.toString(), renderCell: (p) => <div>{p.row.dias.corrente}</div>},
+
+          ],
+          frozen: "start"
         },
         ...impostos.map((i) => ({
           key: `${i}.nominal`,

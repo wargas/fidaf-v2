@@ -1,6 +1,6 @@
 import { recolhimentoDiario } from "@/drizzle/schema";
 import { drizzle } from "drizzle-orm/mysql2";
-import { range, sumBy, filter } from "lodash";
+import { range, sumBy, filter, uniqBy } from "lodash";
 import { eachMonthOfInterval } from "date-fns";
 import { sql, or, between } from "drizzle-orm";
 import _ from "lodash";
@@ -195,8 +195,15 @@ export class Repository {
         return range(1, 13)
             .map((m) => m)
             .map((mes) => {
+
+                const dias = filter(lista, c => c.corrigido > 0)
+
                 return {
                     mes: mes.toString().padStart(2, "0"),
+                    dias: {
+                        anterior: uniqBy(filter(dias, { mes, ano: ano_atual - 1}), "dia").length,
+                        corrente: uniqBy(filter(dias, { mes, ano: ano_atual}), "dia").length,
+                    },
                     iss: {
                         anterior: sumBy(
                             filter(lista, { mes, imposto: "ISS", ano: ano_atual - 1 }),
